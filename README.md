@@ -1,26 +1,6 @@
 # TopEFT
 Repository for work on top quark coupling measurements
 
-## Gridpacks:  
-  
-Code taken from the TTXPheno/gridpacks repository. Cards available there!  
-Available gridpacks, pkl files, customize cards and STDOUTs stored at:  
-```  
-/afs/hephy.at/data/llechner01/TopEFT/gridpacks/<date>/<process>/order<poly order>/  
-```  
-### 25/09/2018  
-2nd order WC gridpacks  
-Reference Point: ctZ = 4., ctZI = 4., ctW = 4., ctWI = 4.  
-Run cards and proc cards taken from TTGamma_Dilept CMS Analysis
-changed to DIM6 model with DIM6 <= 1 for the gamma vertex
-
-| process               | poly order | # coeff | Wilson coefficients  | Link to GEN-SIM events | Link to MiniAOD events |  
-|:---------------------:|:----------:|:-------:|:--------------------:|:----------------------:|:----------------------:|  
-| ttgamma dilept        | 2          | 4       | ctZ, ctZI, ctW, ctWI |                        |                        |  
-| ttgamma semilept t    | 2          | 4       | ctZ, ctZI, ctW, ctWI |                        |                        |  
-| ttgamma semilept tbar | 2          | 4       | ctZ, ctZI, ctW, ctWI |                        |                        |  
-| ttgamma had           | 2          | 4       | ctZ, ctZI, ctW, ctWI |                        |                        |  
-
 
 ## Installation CMSSW_9_4_X
 
@@ -33,6 +13,8 @@ git clone https://github.com/HephyAnalysisSW/TopEFT
 cd $CMSSW_BASE/src
 ./TopEFT/setup94X.sh
 ```
+Afterwards, add your user to this [file](Tools/python/user.py), and create the directories.
+
 
 ## run.py
 
@@ -41,9 +23,14 @@ All masses, couplings and widths are synchronized with the values used in centra
 
 Usage
 ```
-run.py --model ewkDM --process ttZ --couplings DC1V 0.5 DC1A 0.5 --makeGridpack --calcXSec
+run.py --model SMEFTatNLO --process ttZ --couplings cpt 1.0 ctZ 2.0 --calcXSec
 ```
-The argument to `--couplings` can be a file name with a list of model points.
+The argument to `--couplings` can be a file name with a list of model points. One can also just do sth like
+
+```
+run.py --model SMEFTatNLO --process ttZ --couplings cpt -5.0 -1.0 1.0 5.0 --calcXSec
+```
+to calculate the x-sec at 4 different points in cpt space.
 
 ## TOPAZ
 For ifort on lxplus, add these two lines to `.profile`:
