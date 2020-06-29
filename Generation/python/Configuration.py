@@ -55,9 +55,9 @@ class Configuration:
 
         # MG5 directories
 
-        if self.model_name == 'dim6top_LO' or self.model_name == 'dim6top_LO_v2' or MG260:
+        if self.model_name == 'dim6top_LO' or self.model_name == 'dim6top_LO_v2' or MG260 or True: #always use it
             logger.warning( "Model dim6top_LO: Using MG 2.6.0!") 
-            self.MG5_tarball     = '/afs/hephy.at/data/rschoefbeck02/MG/MG5_aMC_v2.6.0.tar.gz' # From MG webpage --> WARNING: No matching PDFs for pattern: Ct10nlo.LHgrid
+            self.MG5_tarball     = '/home/users/dspitzba/MG5_aMC_v2.6.0.tar.gz' # From MG webpage --> WARNING: No matching PDFs for pattern: Ct10nlo.LHgrid
             self.MG5_tmpdir      = os.path.join(self.uniquePath, 'MG5_aMC_v2_6_0')
         else:
             self.MG5_tarball     = '/afs/hephy.at/data/dspitzbart01/MG5_aMC_v2.3.3.tar.gz'
@@ -76,6 +76,7 @@ class Configuration:
 
         # GridPack directories       
         self.GP_tarball      = "/cvmfs/cms.cern.ch/phys_generator/gridpacks/slc6_amd64_gcc481/13TeV/madgraph/V5_2.3.3/ttZ01j_5f_MLM/v1/ttZ01j_5f_tarball.tar.xz"
+        #self.GP_tarball      = "/cvmfs/cms.cern.ch/phys_generator/gridpacks/slc6_amd64_gcc481/13TeV/madgraph/V5_2.4.2/TTWJets_5f_LO_MLM/v1/ttW012j_5f_slc6_amd64_gcc481_CMSSW_7_1_30_tarball.tar.xz"
         self.GP_tmpdir       = os.path.join(self.uniquePath, 'centralGridpack')
         logger.info( "Will use gridpack from %s",self.GP_tarball )
 
@@ -84,7 +85,7 @@ class Configuration:
         self.restrictCard         = os.path.join( self.MG5_tmpdir, 'models', self.model_name, 'restrict_no_b_mass.dat' ) 
 
         # Consistency check of the model: Check that couplings are unique
-        self.all_model_couplings = [ c[0] for c in sum(self.model.values(),[]) ]
+        self.all_model_couplings = [ c[1] for c in sum(self.model.values(),[]) ]
         seen = set()
         uniq = [x for x in self.all_model_couplings if x not in seen and not seen.add(x)] 
         if len(seen)!=len(self.all_model_couplings): 
@@ -94,7 +95,7 @@ class Configuration:
         # Get default values for model
         self.default_model_couplings = {}
         for param_set in self.model.values():
-            for param, val in param_set:
+            for i, param, val in param_set:
                 self.default_model_couplings[param] = val
 
     def __pre_initialize( self ):
@@ -162,9 +163,9 @@ class Configuration:
             # make modifications & build string for the template file
             block_strings[block+'_template_string'] = ""
             for i_coupling, coupling in enumerate(couplings):       # coupling is a pair (name, value) 
-                if modified_couplings.has_key( coupling[0] ):
-                    coupling[1] = modified_couplings[coupling[0]]
-                block_strings[block+'_template_string'] += "%6i %8.6f # %s\n"%( i_coupling + 1, coupling[1], coupling[0] )
+                if modified_couplings.has_key( coupling[1] ):
+                    coupling[2] = modified_couplings[coupling[1]]
+                block_strings[block+'_template_string'] += "%6i %8.6f # %s\n"%( coupling[0], coupling[2], coupling[1] )
 
         # read template file
         with open(self.restrictCardTemplate, 'r') as f:

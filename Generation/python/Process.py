@@ -38,6 +38,7 @@ class Process:
         # xsec cache location
         columns = ["process", "nEvents"]+self.config.all_model_couplings
         self.xsecDB = resultsDB( os.path.join(results_directory, xsec_cache), self.config.model_name, columns )
+        logger.info("DB is in %s", os.path.join(results_directory, xsec_cache))
 
     def __initialize( self, modified_couplings = None):
 
