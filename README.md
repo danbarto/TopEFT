@@ -9,7 +9,7 @@ cmsrel CMSSW_9_4_6_patch1
 cd CMSSW_9_4_6_patch1/src
 cmsenv
 git cms-init
-git clone https://github.com/HephyAnalysisSW/TopEFT
+git clone --single-branch --branch TTW94X https://github.com/danbarto/TopEFT
 cd $CMSSW_BASE/src
 ./TopEFT/setup94X.sh
 ```
